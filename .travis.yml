@@ -10,6 +10,7 @@ addons:
     - gcc-5
     - g++-6
     - gcc-6
+    - fenics
 
 env:
   # Workaround for https://github.com/travis-ci/travis-ci/issues/4681
@@ -77,6 +78,14 @@ install:
     sudo cp -r ../googletest/include/gtest /usr/local/include/
     sudo cp googlemock/gtest/lib*.a /usr/local/lib
 
+  ############################################################################
+  # Install Spacy
+  ############################################################################
+  - |
+    cd ${TRAVIS_BUILD_DIR}/deps
+    git clone https://github.com/spacy-dev/Spacy.git
+    cd Spacy && mkdir build && cd build && cmake .. -DDolfin=ON && make && sudo make install
+
 script:
   - cd $TRAVIS_BUILD_DIR
   - mkdir build && cd build
@@ -84,10 +93,10 @@ script:
     if [[ "${COMPUTE_COVERAGE}" == "true" ]]; then
       cmake -DBuildTest=ON -DCoverage=ON ..
     else
-      cmake -DBuildTest=ON -DCMAKE_CXX_FLAGS="${CXXFLAGS}" -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS}" ..
+      cmake -DBuildTest=ON ..
     fi
   - make
-  - cd Test && ctest
+  - ctest
 
 after_success:
   ############################################################################
@@ -96,7 +105,7 @@ after_success:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" && "${COMPUTE_COVERAGE}" == "true" ]]; then
       cd $TRAVIS_BUILD_DIR/build/Test
-      lcov --gcov-tool gcov-6 --capture --no-external --directory .. --base-directory ../../Spacy --output-file coverage.info
+      lcov --gcov-tool gcov-6 --capture --no-external --directory . --base-directory /usr/local/include/Spacy/Adapter --output-file coverage.info
       coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info
     fi
 
