@@ -10,7 +10,6 @@ addons:
     - gcc-5
     - g++-6
     - gcc-6
-    - libeigen3-dev
 
 env:
   # Workaround for https://github.com/travis-ci/travis-ci/issues/4681
@@ -77,6 +76,11 @@ install:
     cd googletest && mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="${CXXFLAGS}" -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS}" .. && make
     sudo cp -r ../googletest/include/gtest /usr/local/include/
     sudo cp googlemock/gtest/lib*.a /usr/local/lib
+
+  ############################################################################
+  # Install Eigen
+  ############################################################################
+  - sudo apt-get install libeigen3-dev
 
   ############################################################################
   # Install Spacy
