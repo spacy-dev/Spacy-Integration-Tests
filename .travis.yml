@@ -81,9 +81,9 @@ install:
   # Install Eigen3, fenics
   ############################################################################
   - sudo apt-get install libeigen3-dev
-  - sudo add-apt-repository ppa:fenics-packages/fenics
+  - sudo add-apt-repository ppa:fenics-packages/fenics -qq
   - sudo apt-get update
-  - sudo apt-get install fenics
+  - sudo apt-get install fenics -qq
   - sudo apt-get dist-upgrade
 
   ############################################################################
