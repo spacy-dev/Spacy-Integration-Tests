@@ -21,6 +21,8 @@ if(Coverage)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -coverage")
 endif()
 
+include_directories(.)
+
 find_package(Spacy CONFIG REQUIRED)
 include_directories(${Spacy_INCLUDE_DIRS})
 set(LIBS "${Spacy_LIBRARIES}")
