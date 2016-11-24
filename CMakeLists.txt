@@ -26,7 +26,7 @@ include_directories(${Spacy_INCLUDE_DIRS})
 set(LIBS "${Spacy_LIBRARIES}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Spacy_CXX_FLAGS}")
 
-find_package(GTest CONFIG REQUIRED)
+find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 set(LIBS "${LIBS} ${GTEST_LIBRARIES} pthread")
 
