@@ -108,7 +108,7 @@ after_success:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" && "${COMPUTE_COVERAGE}" == "true" ]]; then
       cd $TRAVIS_BUILD_DIR/build/Test
-      lcov --gcov-tool gcov-6 --capture --no-external --directory . --base-directory /usr/local/include/Spacy/Adapter --output-file coverage.info
+      lcov --gcov-tool gcov-6 --capture --extract /usr/local/include/Spacy/Adapter --directory . --base-directory /usr/local/include/Spacy/ --output-file coverage.info
       coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info
     fi
 
