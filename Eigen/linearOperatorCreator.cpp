@@ -1,4 +1,4 @@
-#include <Test/gtest.hh>
+#include <gtest.hh>
 
 //#include "Spacy/Adapter/Scalar/linearOperator.hh"
 //#include "Spacy/Adapter/Scalar/linearOperatorCreator.hh"

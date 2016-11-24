@@ -1,4 +1,4 @@
-#include <Test/gtest.hh>
+#include <gtest.hh>
 
 //#include "Spacy/Adapter/Scalar/linearSolver.hh"
 //#include "Spacy/Spaces/RealSpace/real.hh"

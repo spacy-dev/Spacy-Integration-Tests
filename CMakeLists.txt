@@ -25,12 +25,15 @@ include_directories(.)
 
 find_package(Spacy CONFIG REQUIRED)
 include_directories(${Spacy_INCLUDE_DIRS})
-set(LIBS "${Spacy_LIBRARIES}")
+#set(LIBS "${Spacy_LIBRARIES}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Spacy_CXX_FLAGS}")
 
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
-set(LIBS "${LIBS} ${GTEST_LIBRARIES} pthread")
+set(LIBS "${GTEST_LIBRARIES} pthread")
+
+
+aux_source_directory(Mock MOCK_SRC_LIST)
 
 if(Dolfin)
   # Tell cmake where to find DOLFINConfig.cmake
@@ -42,9 +45,9 @@ endif()
 if(Eigen)
   find_package(Eigen3 REQUIRED)
   include_directories(${EIGEN3_INCLUDE_DIR})
+  aux_source_directory(Eigen SRC_LIST)
 endif()
 
-aux_source_directory(Eigen SRC_LIST)
 
 include(CTest)
 enable_testing()
@@ -53,8 +56,9 @@ foreach(TEST ${SRC_LIST})
   get_filename_component(TEST_DIR ${TEST} DIRECTORY)
   string(REGEX REPLACE "/" "_" TEST_DIR ${TEST_DIR})
   set(TEST_UNIQUE_NAME "${TEST_DIR}_${TEST_NAME}")
-  add_executable(${TEST_UNIQUE_NAME} ${TEST})
-  target_link_libraries(${TEST_UNIQUE_NAME} ${LIBS})
+  add_executable(${TEST_UNIQUE_NAME} ${TEST} ${MOCK_SRC_LIST})
+#  target_link_libraries(${TEST_UNIQUE_NAME} spacy ${GTEST_LIBRARIES} pthread)
+  target_link_libraries(${TEST_UNIQUE_NAME} ${Spacy_LIBRARIES} ${GTEST_LIBRARIES} pthread)
   if(Kaskade)
     target_link_libraries(${TEST_UNIQUE_NAME} kaskade boost_system boost_timer boost_thread dunegrid dunecommon dunegeometry ugS3 ugS2 ugL3 ugS2 devS devX umfpack amd acml)
   endif()
