@@ -10,7 +10,7 @@ addons:
     - gcc-5
     - g++-6
     - gcc-6
-    - eigen3-dev
+    - libeigen3-dev
 
 env:
   # Workaround for https://github.com/travis-ci/travis-ci/issues/4681
