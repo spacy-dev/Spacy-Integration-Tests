@@ -10,7 +10,7 @@ addons:
     - gcc-5
     - g++-6
     - gcc-6
-    - fenics
+    - eigen3-dev
 
 env:
   # Workaround for https://github.com/travis-ci/travis-ci/issues/4681
@@ -91,12 +91,11 @@ script:
   - mkdir build && cd build
   - |
     if [[ "${COMPUTE_COVERAGE}" == "true" ]]; then
-      cmake -DBuildTest=ON -DCoverage=ON ..
+      cmake -DEigen=ON -DCoverage=ON ..
     else
-      cmake -DBuildTest=ON ..
+      cmake -DEigen=ON ..
     fi
-  - make
-  - ctest
+  - make && ctest
 
 after_success:
   ############################################################################
