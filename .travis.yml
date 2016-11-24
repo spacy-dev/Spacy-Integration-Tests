@@ -80,7 +80,11 @@ install:
   ############################################################################
   # Install Eigen3, fenics
   ############################################################################
-  - sudo apt-get install libeigen3-dev fenics
+  - sudo apt-get install libeigen3-dev
+  - sudo add-apt-repository ppa:fenics-packages/fenics
+  - sudo apt-get update
+  - sudo apt-get install fenics
+  - sudo apt-get dist-upgrade
 
   ############################################################################
   # Install Spacy
