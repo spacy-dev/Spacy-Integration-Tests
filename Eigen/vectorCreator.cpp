@@ -2,7 +2,8 @@
 
 #include <Spacy/Adapter/Eigen/vectorCreator.hh>
 #include <mockSetup.hh>
-#include <setup.hh>
+
+#include "setup.hh"
 
 using namespace Spacy;
 
