@@ -1,7 +1,7 @@
 #include <gtest.hh>
 
 #include <Spacy/Adapter/Scalar/linearSolver.hh>
-#include <Spacy/Spaces/RealSpace/real.hh>
+#include <Spacy/Spaces/ScalarSpace/real.hh>
 #include <Spacy/vector.hh>
 #include <Spacy/Util/cast.hh>
 
