@@ -1,4 +1,9 @@
+sudo: required
+
 language: c++
+
+services:
+  - docker
 
 addons:
   apt:
@@ -15,8 +20,8 @@ install:
   ############################################################################
   # Download and start fenics docker image
   ############################################################################
-  - sudo docker pull quay.io/fenicsproject/stable:latest
-  - sudo docker run -ti -v $(DEPS_DIR):/home/fenics/shared --name fenics-container quay.io/fenicsproject/stable
+  - docker pull quay.io/fenicsproject/stable:latest
+  - docker run -ti -v $(DEPS_DIR):/home/fenics/shared --name fenics-container quay.io/fenicsproject/stable
   - cd shared
   
   ############################################################################
