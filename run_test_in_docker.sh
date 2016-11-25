@@ -19,7 +19,7 @@ sudo cp googlemock/gtest/lib*.a /usr/local/lib
 # Install Spacy
 cd ${DEPS}
 git clone https://github.com/spacy-dev/Spacy.git
-cd Spacy && mkdir build && cd build && cmake .. && make && sudo make install
+cd Spacy && mkdir build && cd build && cmake .. -DDolfin=ON && make && sudo make install
 
 # Run tests
 cd ${FENICS_SHARED}
