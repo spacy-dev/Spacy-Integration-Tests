@@ -10,8 +10,7 @@ install:
   # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
   ############################################################################
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-  - FENICS_HOME="/home/fenics"
-  - FENICS_SHARED="${FENICS_HOME}/shared"
+  - FENICS_SHARED="$/home/fenics/shared"
   - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
   
   ############################################################################
