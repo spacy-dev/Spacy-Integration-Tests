@@ -31,3 +31,4 @@ inline auto primal_dual_product_hilbert_space_1D(int scalar_degrees_of_freedom)
     auto V = std::make_shared<L2Functional::CoefficientSpace_x>(mesh);
     return Spacy::FEniCS::makeHilbertSpace(V,{0,1},{2});
 }
+

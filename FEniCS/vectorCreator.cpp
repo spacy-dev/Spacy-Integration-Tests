@@ -32,50 +32,23 @@ TEST(FEniCS,ProductSpaceCreator)
     const auto& P = creator<FEniCS::VectorCreator>(X.subSpace(2));
 
     EXPECT_EQ( Y.size(), degrees_of_freedom );
-    EXPECT_EQ( Y.dofmap(0), 0 );
-    EXPECT_EQ( Y.dofmap(1), 1 );
-    EXPECT_EQ( Y.inverseDofmap(0), 0 );
-    EXPECT_EQ( Y.inverseDofmap(1), 1 );
-
     EXPECT_EQ( U.size(), degrees_of_freedom );
-    EXPECT_EQ( U.dofmap(2), 0 );
-    EXPECT_EQ( U.dofmap(3), 1 );
-    EXPECT_EQ( U.inverseDofmap(0), 2 );
-    EXPECT_EQ( U.inverseDofmap(1), 3 );
-
     EXPECT_EQ( P.size(), degrees_of_freedom );
-    EXPECT_EQ( P.dofmap(4), 0 );
-    EXPECT_EQ( P.dofmap(5), 1 );
-    EXPECT_EQ( P.inverseDofmap(0), 4 );
-    EXPECT_EQ( P.inverseDofmap(1), 5 );
 }
 
-//TEST(FEniCS,PrimalDualProductSpaceCreator)
-//{
-//    constexpr int degrees_of_freedom = 2;
-//    auto W = primal_dual_product_hilbert_space_1D(degrees_of_freedom);
-//    const auto& X = creator<ProductSpace::VectorCreator>(W);
-//    const auto& X_primal = creator<ProductSpace::VectorCreator>(X.subSpace(0));
-//    const auto& X_dual = creator<ProductSpace::VectorCreator>(X.subSpace(1));
-//    const auto& Y = creator<FEniCS::VectorCreator>(X_primal.subSpace(0));
-//    const auto& U = creator<FEniCS::VectorCreator>(X_primal.subSpace(1));
-//    const auto& P = creator<FEniCS::VectorCreator>(X_dual.subSpace(0));
+TEST(FEniCS,PrimalDualProductSpaceCreator)
+{
+    constexpr int scalar_degrees_of_freedom = 2;
+    constexpr int degrees_of_freedom = scalar_degrees_of_freedom * scalar_degrees_of_freedom;
+    auto W = primal_dual_product_hilbert_space_1D(scalar_degrees_of_freedom);
+    const auto& X = creator<ProductSpace::VectorCreator>(W);
+    const auto& X_primal = creator<ProductSpace::VectorCreator>(X.subSpace(0));
+    const auto& X_dual = creator<ProductSpace::VectorCreator>(X.subSpace(1));
+    const auto& Y = creator<FEniCS::VectorCreator>(X_primal.subSpace(0));
+    const auto& U = creator<FEniCS::VectorCreator>(X_primal.subSpace(1));
+    const auto& P = creator<FEniCS::VectorCreator>(X_dual.subSpace(0));
 
-//    EXPECT_EQ( Y.size(), degrees_of_freedom );
-//    EXPECT_EQ( Y.dofmap(0), 0 );
-//    EXPECT_EQ( Y.dofmap(1), 1 );
-//    EXPECT_EQ( Y.inverseDofmap(0), 0 );
-//    EXPECT_EQ( Y.inverseDofmap(1), 1 );
-
-//    EXPECT_EQ( U.size(), degrees_of_freedom );
-//    EXPECT_EQ( U.dofmap(2), 0 );
-//    EXPECT_EQ( U.dofmap(3), 1 );
-//    EXPECT_EQ( U.inverseDofmap(0), 2 );
-//    EXPECT_EQ( U.inverseDofmap(1), 3 );
-
-//    EXPECT_EQ( P.size(), degrees_of_freedom );
-//    EXPECT_EQ( P.dofmap(4), 0 );
-//    EXPECT_EQ( P.dofmap(5), 1 );
-//    EXPECT_EQ( P.inverseDofmap(0), 4 );
-//    EXPECT_EQ( P.inverseDofmap(1), 5 );
-//}
+    EXPECT_EQ( Y.size(), degrees_of_freedom );
+    EXPECT_EQ( U.size(), degrees_of_freedom );
+    EXPECT_EQ( P.size(), degrees_of_freedom );
+}
