@@ -1,7 +1,8 @@
 #!/bin/bash
 
 FENICS_HOME=/home/fenics
-DEPS="${FENICS_HOME}/shared/deps"
+FENICS_SHARED="${FENICS_HOME}/shared"
+DEPS="${FENICS_SHARED}/deps"
 
 # Install cmake
 cd $DEPS
@@ -21,7 +22,7 @@ git clone https://github.com/spacy-dev/Spacy.git
 cd Spacy && mkdir build && cd build && cmake .. && make && sudo make install
 
 # Run tests
-cd ${FENICS_HOME}
+cd ${FENICS_SHARED}
 mkdir build && cd build
 cmake .. -DEigen=ON -DDolfin=ON
 make && ctest
