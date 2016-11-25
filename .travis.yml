@@ -15,13 +15,15 @@ install:
   # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
   ############################################################################
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - FENICS_HOME="/home/fenics
+  - FENICS_SHARED="${FENICS_HOME}/shared"
   - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
   
   ############################################################################
   # Download and start fenics docker image
   ############################################################################
   - docker pull quay.io/fenicsproject/stable:latest
-  - docker run -ti -v $(DEPS_DIR):/home/fenics/shared --name fenics-container quay.io/fenicsproject/stable
+  - docker run -ti -v ${DEPS_DIR}:${FENICS_SHARED} --name fenics-container quay.io/fenicsproject/stable
   - cd shared
   
   ############################################################################
@@ -31,7 +33,7 @@ install:
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
       CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz"
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+      export PATH=${FENICS_SHARED}/cmake/bin:${PATH}
     else
       if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
     fi
@@ -59,23 +61,15 @@ install:
     sudo cp googlemock/gtest/lib*.a /usr/local/lib
 
   ############################################################################
-  # Install Eigen3, fenics
-  ############################################################################
-  - sudo apt-get install libeigen3-dev
-  - sudo add-apt-repository ppa:fenics-packages/fenics -y
-  - sudo apt-get update -y
-  - sudo apt-get install fenics -y
-
-  ############################################################################
   # Install Spacy
   ############################################################################
   - |
-    cd ${TRAVIS_BUILD_DIR}/deps
+    cd ${FENICS_SHARED}
     git clone https://github.com/spacy-dev/Spacy.git
     cd Spacy && mkdir build && cd build && cmake .. && make && sudo make install
 
 script:
-  - cd $TRAVIS_BUILD_DIR
+  - cd ~
   - mkdir build && cd build
   - |
     if [[ "${COMPUTE_COVERAGE}" == "true" ]]; then
@@ -91,7 +85,7 @@ after_success:
   ############################################################################
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" && "${COMPUTE_COVERAGE}" == "true" ]]; then
-      cd $TRAVIS_BUILD_DIR/build/Test
+      cd $FENICS_HOME/build/Test
       lcov --gcov-tool gcov-6 --capture --extract /usr/local/include/Spacy/Adapter --directory . --base-directory /usr/local/include/Spacy/ --output-file coverage.info
       coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info
     fi
