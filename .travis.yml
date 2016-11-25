@@ -5,11 +5,6 @@ language: c++
 services:
   - docker
 
-addons:
-  apt:
-    sources: &sources
-    - ubuntu-toolchain-r-test
-
 install:
   ############################################################################
   # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
@@ -20,73 +15,10 @@ install:
   - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
   
   ############################################################################
-  # Download and start fenics docker image
+  # Download fenics docker image
   ############################################################################
   - docker pull quay.io/fenicsproject/stable:latest
-  - docker run -ti -v ${DEPS_DIR}:${FENICS_SHARED} --name fenics-container quay.io/fenicsproject/stable
-  - cd shared
-  
-  ############################################################################
-  # Install a recent CMake
-  ############################################################################
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz"
-      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-      export PATH=${FENICS_SHARED}/cmake/bin:${PATH}
-    else
-      if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
-    fi
-    
-  ############################################################################
-  # Install lcov
-  ############################################################################
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" && "${COMPUTE_COVERAGE}" == "true" ]]; then
-      travis_retry wget --no-check-certificate --quiet http://mirrors.us.kernel.org/ubuntu//pool/universe/l/lcov/lcov_1.12-3_all.deb
-      sudo dpkg -i lcov_1.12-3_all.deb
-      sudo apt-add-repository ppa:brightbox/ruby-ng -y
-      sudo apt-get update -qq
-      sudo apt-get install ruby2.2 -qq
-      sudo gem install coveralls-lcov
-    fi
-
-  ############################################################################
-  # Install gtest
-  ############################################################################
-  - |
-    git clone https://github.com/google/googletest.git
-    cd googletest && mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="${CXXFLAGS}" -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS}" .. && make
-    sudo cp -r ../googletest/include/gtest /usr/local/include/
-    sudo cp googlemock/gtest/lib*.a /usr/local/lib
-
-  ############################################################################
-  # Install Spacy
-  ############################################################################
-  - |
-    cd ${FENICS_SHARED}
-    git clone https://github.com/spacy-dev/Spacy.git
-    cd Spacy && mkdir build && cd build && cmake .. && make && sudo make install
 
 script:
-  - cd ~
-  - mkdir build && cd build
-  - |
-    if [[ "${COMPUTE_COVERAGE}" == "true" ]]; then
-      cmake -DEigen=ON -DDolfin=ON -DCoverage=ON ..
-    else
-      cmake -DEigen=ON -DDolfin=ON ..
-    fi
-  - make && ctest
-
-after_success:
-  ############################################################################
-  # Upload coverage information to coveralls.io
-  ############################################################################
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" && "${COMPUTE_COVERAGE}" == "true" ]]; then
-      cd $FENICS_HOME/build/Test
-      lcov --gcov-tool gcov-6 --capture --extract /usr/local/include/Spacy/Adapter --directory . --base-directory /usr/local/include/Spacy/ --output-file coverage.info
-      coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info
-    fi
+  - docker --rm -v ${DEPS_DIR}:{FENICS_SHARED} -w /home/fenics/shared quay.io/fenicsproject/stable "./run_test_in_docker.sh"
 
