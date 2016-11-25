@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.1)
 # Set path to cmake scripts
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
-    ${CMAKE_SOURCE_DIR}/cmake
+    ${PROJECT_SOURCE_DIR}/cmake
     )
 
 # Do not allow in-source builds

@@ -5,32 +5,6 @@ addons:
     sources: &sources
     - ubuntu-toolchain-r-test
 
-    packages:
-    - g++-5
-    - gcc-5
-    - g++-6
-    - gcc-6
-
-env:
-  # Workaround for https://github.com/travis-ci/travis-ci/issues/4681
-  matrix:
-    - TRAVIS_EMPTY_JOB_WORKAROUND=true
-  
-matrix:
-  exclude:
-    - env: TRAVIS_EMPTY_JOB_WORKAROUND=true
-  include:
-    # LINUX
-    # GCC 5
-    - os: linux
-      env: COMPILER=g++-5 CCOMPILER=gcc-5 COMPUTE_COVERAGE=false
-      compiler: gcc
-
-    # GCC 6
-    - os: linux
-      env: COMPILER=g++-6 CCOMPILER=gcc-6 GCOV=gcov-6 COMPUTE_COVERAGE=true
-      compiler: gcc
-     
 install:
   ############################################################################
   # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
@@ -39,9 +13,12 @@ install:
   - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
   
   ############################################################################
-  # Override compiler if needed
+  # Download and start fenics docker image
   ############################################################################
-  - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; export CC=${CCOMPILER}; fi
+  - |
+    docker pull quay.io/fenicsproject/stable:latest
+    docker run -ti -v $(DEPS_DIR):/home/fenics/shared --name fenics-container quay.io/fenicsproject/stable
+    cd shared
   
   ############################################################################
   # Install a recent CMake
