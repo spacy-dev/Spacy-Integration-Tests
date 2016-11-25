@@ -84,7 +84,6 @@ install:
   - sudo add-apt-repository ppa:fenics-packages/fenics -y
   - sudo apt-get update -y
   - sudo apt-get install fenics -y
-  - sudo apt-get dist-upgrade -y
 
   ############################################################################
   # Install Spacy
