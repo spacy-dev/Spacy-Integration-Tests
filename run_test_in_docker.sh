@@ -16,6 +16,11 @@ cd googletest && mkdir build && cd build && cmake .. && make -j2
 sudo cp -r ../googletest/include/gtest /usr/local/include/
 sudo cp googlemock/gtest/lib*.a /usr/local/lib
 
+# Install FunG
+cd ${DEPS}
+git clone https://github.com/lubkoll/FunG.git
+sudo cp -r FunG/fung /usr/local/include
+
 # Install Spacy
 cd ${DEPS}
 git clone https://github.com/spacy-dev/Spacy.git
