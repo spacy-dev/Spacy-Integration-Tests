@@ -26,6 +26,11 @@ cd ${DEPS}
 git clone https://github.com/spacy-dev/Spacy.git
 cd Spacy && mkdir build && cd build && cmake .. -DDolfin=ON && make -j2 && sudo make install
 
+# Install deal.II
+cd ${DEPS}
+git clone https://github.com/dealii/dealii
+cd dealii && mkdir build && cd build && cmake .. && sudo make -j2 install
+
 # Run tests
 cd ${FENICS_SHARED}
 mkdir build && cd build
