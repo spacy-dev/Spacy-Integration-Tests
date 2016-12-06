@@ -1,6 +1,5 @@
 #!/bin/bash
 
-FENICS_HOME=/home/fenics
 FENICS_SHARED="${FENICS_HOME}/shared"
 DEPS="${FENICS_SHARED}/deps"
 
@@ -27,7 +26,7 @@ git clone https://github.com/spacy-dev/Spacy.git
 cd Spacy && mkdir build && cd build && cmake .. -DDolfin=ON && make -j2 && sudo make install
 
 # Run tests
-cd ${FENICS_HOME}/FEniCS
+cd ${FENICS_SHARED}/FEniCS
 ffc -l dolfin LinearHeat.ufl
 ffc -l dolfin L2Functional.ufl
 
