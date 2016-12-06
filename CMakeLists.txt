@@ -1,20 +1,6 @@
-cmake_minimum_required(VERSION 3.1)
-
-option(Coverage "Coverage" OFF)
-option(Kaskade "Kaskade" OFF)
-option(Dolfin "Dolfin" OFF)
-option(Eigen "Eigen" OFF)
-option(dealII "dealII" OFF)
-
-if(dealII)
-  find_package(deal.II 8.4 QUIET
-      HINTS ${deal.II_DIR} ${DEAL_II_DIR} ../ ../../ $ENV{DEAL_II_DIR}
-      )
-  aux_source_directory(dealII SRC_LIST)
-  DEAL_II_INITIALIZE_CACHED_VARIABLES()
-endif()
-
 project(Spacy-Integration-Tests)
+
+cmake_minimum_required(VERSION 3.1)
 
 # Set path to cmake scripts
 set(CMAKE_MODULE_PATH
@@ -24,6 +10,11 @@ set(CMAKE_MODULE_PATH
 
 # Do not allow in-source builds
 include(ConfigSafeGuards)
+
+option(Coverage "Coverage" OFF)
+option(Kaskade "Kaskade" OFF)
+option(Dolfin "Dolfin" OFF)
+option(Eigen "Eigen" OFF)
 
 if(Coverage)
   set(CMAKE_BUILD_TYPE Debug)
@@ -72,6 +63,7 @@ if(Kaskade)
   aux_source_directory(Kaskade SRC_LIST)
 endif()
 
+
 include(CTest)
 enable_testing()
 foreach(TEST ${SRC_LIST})
@@ -80,9 +72,6 @@ foreach(TEST ${SRC_LIST})
   string(REGEX REPLACE "/" "_" TEST_DIR ${TEST_DIR})
   set(TEST_UNIQUE_NAME "${TEST_DIR}_${TEST_NAME}")
   add_executable(${TEST_UNIQUE_NAME} ${TEST})
-  if(dealII)
-      DEAL_II_SETUP_TARGET(${TEST_UNIQUE_NAME})
-  endif()
   target_link_libraries(${TEST_UNIQUE_NAME} mocks ${Spacy_LIBRARIES} ${GTEST_LIBRARIES} pthread)
   if(Kaskade)
     target_link_libraries(${TEST_UNIQUE_NAME} kaskade boost_system boost_timer boost_thread dunegrid dunecommon dunegeometry ugS3 ugS2 ugL3 ugS2 devS devX umfpack amd acml)
@@ -92,4 +81,3 @@ foreach(TEST ${SRC_LIST})
   endif()
 add_test(${TEST_UNIQUE_NAME} ${PROJECT_BINARY_DIR}/${TEST_UNIQUE_NAME})
 endforeach()
-
