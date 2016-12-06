@@ -1,6 +1,19 @@
-project(Spacy-Integration-Tests)
-
 cmake_minimum_required(VERSION 3.1)
+
+option(Coverage "Coverage" OFF)
+option(Kaskade "Kaskade" OFF)
+option(Dolfin "Dolfin" OFF)
+option(Eigen "Eigen" OFF)
+option(dealII "dealII" OFF)
+
+if(dealII)
+  find_package(deal.II 8.4 QUIET
+      HINTS ${deal.II_DIR} ${DEAL_II_DIR} ../ ../../ $ENV{DEAL_II_DIR}
+      )
+  DEAL_II_INITIALIZE_CACHED_VARIABLES()
+endif()
+
+project(Spacy-Integration-Tests)
 
 # Set path to cmake scripts
 set(CMAKE_MODULE_PATH
@@ -10,11 +23,6 @@ set(CMAKE_MODULE_PATH
 
 # Do not allow in-source builds
 include(ConfigSafeGuards)
-
-option(Coverage "Coverage" OFF)
-option(Kaskade "Kaskade" OFF)
-option(Dolfin "Dolfin" OFF)
-option(Eigen "Eigen" OFF)
 
 if(Coverage)
   set(CMAKE_BUILD_TYPE Debug)
@@ -50,6 +58,10 @@ if(Dolfin)
   find_package(VTK HINTS ${VTK_DIR} $ENV{VTK_DIR} NO_MODULE QUIET)
 endif()
 
+if(dealII)
+    aux_source_directory(dealII SRC_LIST)
+endif()
+
 if(Kaskade)
   include_directories(/home/lars/Libraries/Kaskade7.3
                       /opt/acml5.3.1/gfortran64/include
@@ -78,6 +90,9 @@ foreach(TEST ${SRC_LIST})
   endif()
   if(Dolfin)
     target_link_libraries(${TEST_UNIQUE_NAME} ${DOLFIN_LIBRARIES})
+  endif()
+  if(dealII)
+    DEAL_II_SETUP_TARGET(${TEST_UNIQUE_NAME})
   endif()
 add_test(${TEST_UNIQUE_NAME} ${PROJECT_BINARY_DIR}/${TEST_UNIQUE_NAME})
 endforeach()
