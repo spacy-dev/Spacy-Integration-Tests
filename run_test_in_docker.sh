@@ -4,10 +4,10 @@ FENICS_SHARED="${FENICS_HOME}/shared"
 DEPS="${FENICS_SHARED}/deps"
 
 # Install cmake
-cd $DEPS
-CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz"
-mkdir cmake && wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-export PATH=${DEPS}/cmake/bin:${PATH}
+#cd $DEPS
+#CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz"
+#mkdir cmake && wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+#export PATH=${DEPS}/cmake/bin:${PATH}
 
 # Install gtest
 git clone https://github.com/google/googletest.git
