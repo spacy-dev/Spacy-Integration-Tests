@@ -50,7 +50,6 @@ endif()
 
 
 if(Dolfin) 
-  find_package(Boost CONFIG REQUIRED)
   find_package(DOLFIN CONFIG REQUIRED)
   include_directories(${DOLFIN_INCLUDE_DIRS})
   include_directories(SYSTEM ${DOLFIN_3RD_PARTY_INCLUDE_DIRS})
