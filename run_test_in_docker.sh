@@ -20,9 +20,6 @@ cd ${DEPS}
 git clone https://github.com/lubkoll/FunG.git
 sudo cp -r FunG/fung /usr/local/include
 
-# Install Boost.FileSystem
-sudo apt-get install libboost-filesystem-dev
-
 # Install Spacy
 cd ${DEPS}
 git clone https://github.com/spacy-dev/Spacy.git
